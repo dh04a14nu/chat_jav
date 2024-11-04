@@ -1,59 +1,53 @@
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import java.io.*;
 import java.net.*;
-import javafx.application.Platform;
 
-public class ChatController {
-    @FXML
-    private ListView<String> messageList;
-    @FXML
-    private TextField messageInput;
-
+public class ClientHandler implements Runnable {
     private Socket socket;
-    private BufferedReader in;
     private BufferedWriter out;
+    private BufferedReader in;
 
-    @FXML
-    public void initialize() {
-        connectToServer();
-        new Thread(this::receiveMessages).start();
-    }
-
-    private void connectToServer() {
+    public ClientHandler(Socket socket) {
+        this.socket = socket;
         try {
-            socket = new Socket("localhost", 12345);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void receiveMessages() {
-        String message;
+    @Override
+    public void run() {
         try {
+            String message;
             while ((message = in.readLine()) != null) {
-                String finalMessage = message;
-                Platform.runLater(() -> messageList.getItems().add(finalMessage));
+                System.out.println("Received: " + message);
+                ChatServer.broadcastMessage(message, this);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public void sendMessage(String message) {
+        try {
+            out.write(message + "\n");
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void sendMessage() {
-        String message = messageInput.getText();
-        if (!message.isEmpty()) {
-            try {
-                out.write(message + "\n");
-                out.flush();
-                messageInput.clear();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void closeConnection() {
+        try {
+            ChatServer.removeClient(this);
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

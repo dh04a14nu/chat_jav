@@ -1,5 +1,5 @@
 @echo off
-set PATH_TO_FX=C:\Users\TEMP.KGISLEDU.011\Documents\javafx-sdk-23.0.1\lib
+set PATH_TO_FX=C:\Users\TEMP.KGISLEDU.011\Documents\javafx-sdk-17.0.13\lib
 
 echo Compiling Java files...
 javac --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -d bin src/*.java
