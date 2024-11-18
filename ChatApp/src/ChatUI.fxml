@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ChatController">
-    <ListView fx:id="messageList" prefHeight="400" prefWidth="300" />
-    <HBox spacing="10">
-        <TextField fx:id="messageInput" promptText="Type a message..." prefWidth="200" />
-        <Button text="Send" onAction="#sendMessage" />
-    </HBox>
-</VBox>

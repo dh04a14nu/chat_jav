@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.appchat.PrimaryController" spacing="10" alignment="CENTER">
+    <ListView fx:id="messageList" prefHeight="400.0" prefWidth="300.0" />
+    <HBox spacing="10.0">
+        <TextField fx:id="messageInput" promptText="Type your message..." />
+        <Button text="Send" onAction="#sendMessage" />
+    </HBox>
+</VBox>
